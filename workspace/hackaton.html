@@ -17,47 +17,31 @@
     <script type="text/javascript">
 
     window.onload = function() {
-	var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update });
+	
+	
+	
+	var game = new Phaser.Game(800, 600, Phaser.AUTO, 'phaser-example', { preload: preload, create: create });
 
 function preload() {
 
-    game.load.image('pic', 'assets/pics/hotshot-chaos_in_tokyo.png');
+    game.load.image('soil', '../images/soil.png');
+	game.load.image('sun', '../images/sun.png');
+	game.load.image('cloud_heart', '../images/cloud_heart2.png');
+	game.load.image('cloud_rain', '../images/cloud_rain.png');
 
 }
-
-var bmd;
-var area;
-var dropTime = 0;
 
 function create() {
 
-	game.stage.backgroundColor = '#2d2d2d';
+    //  This simply creates an Image using the picture we loaded above and positions it at 100 x 100
 
-	bmd = game.make.bitmapData();
-	bmd.load('pic').cls();
+    //  The difference between an Image and a Sprite is that you cannot animate or add a physics body to an Image
 
-	bmd.addToWorld(game.world.centerX, game.world.centerY, 0.5, 0.5, 2, 2);
-
-	game.stage.smoothed = false;
-
-	area = new Phaser.Rectangle(0, bmd.height, bmd.width, 1);
-
-	dropTime = game.time.now + 250;
-
-}
-
-function update () {
-
-	if (area.y > 0 && game.time.now > dropTime)
-	{
-		for (var y = 0; y < area.y; y++)
-		{
-			bmd.copyRect('pic', area, 0, y);
-		}
-
-		area.y--;
-		dropTime = game.time.now + 25;
-	}
+    var image = game.add.image(0, 450, 'soil');
+	var image = game.add.image(550, -110, 'sun');
+	var image = game.add.image(100, 110, 'cloud_heart');
+	var image = game.add.image(200, 110, 'cloud_rain');
+	
 
 }
 
