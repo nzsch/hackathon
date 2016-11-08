@@ -18,11 +18,17 @@
 	var rainChance = 0.3342; // I got this number from Google. 122/365 (number for NYC)
 
 	class Plant {
-		constructor(sprite, health, age, game) {
+		constructor(sprite, x, y, health, age, game) {
 			this.sprite = sprite;
 			this.health = health
 			this.age = age;
 			this.game = game;
+
+			this.sprite = this.game.add.sprite(x, y, sprite);
+			this.sprite.scale.setTo(0.45, 0.45);
+		}
+
+		sprout() {
 		}
 
 		getHealth() {
@@ -77,7 +83,6 @@
 			ground += game.add.tileSprite(i, 425, 200, 175, 'tile_earth');
 		}
 
-		plant = new Plant('foo', 100, 1, this);
 
         // Add toolbar and tool sprites
 		toolbar = game.add.image(0, 39, 'image_toolbar');
@@ -134,11 +139,15 @@
 	function stopDrag(sprite, game) {
 		// TODO: Trigger the action?
 		if(sprite.key === "seed_sunflower") {
+			plant = new Plant('plant', sprite.x, 250, 100, 1, this);
 			sprite.x = 40
 			sprite.y = 64;
+			// Seed drops and the plant grows after
 		} else if (sprite.key === "seed_acorn") {
+			plant = new Plant('plant', sprite.x, 250, 100, 1, this);
 			sprite.x = 40
 			sprite.y = 212;
+			// Seed drops and the plant grows after
 		} else if (sprite.key === "image_wateringcan") {
 			sprite.x = 19;
 			sprite.y = 138;
