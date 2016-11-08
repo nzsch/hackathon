@@ -11,9 +11,9 @@
     window.onload = function() {
 	var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update });
 	var bmd;
-	var dropTime = 0;
-	var seedSprite;
-	var plantSprite;
+	var isDay = true;
+	var dayColor = "#7FEEFF";
+	var nightColor = "#848380";
 
 	function preload() {
 		game.load.image('tile_earth', 'assets/img/tile_earth.png');
@@ -23,12 +23,12 @@
 		game.load.image('tile_earth', 'assets/img/tile_earth.png');
 		game.load.image('image_toolbar', 'assets/img/toolbar.png');
 		//preload spritsheet and save coordinate of the image 
-	    	game.load.image('weather', 'assets/img/weather.png');
+	   	game.load.image('weather', 'assets/img/weather.png');
 	}
 
 	function create() {
         // Sky color
-		game.stage.backgroundColor = '#7FEEFF';
+		game.stage.backgroundColor = dayColor;
 
         // Tile ground
 		ground = [];
@@ -49,8 +49,17 @@
 		bmd.load('tile_earth').cls();
 		bmd.addToWorld(game.world.centerX, game.world.centerY, 0.5, 0.5, 2, 2);
 		game.stage.smoothed = false;
-		dropTime = game.time.now + 250;
-        
+
+		game.time.events.repeat(Phaser.Timer.SECOND * 10, 10000, toggleDay, this);
+	}
+
+	function toggleDay() {
+		isDay = !isDay;
+		if(isDay) {
+			game.stage.backgroundColor = dayColor;
+		} else {
+			game.stage.backgroundColor = nightColor;
+		}
 	}
 
 	// ----- BEGIN BUTTON FUNCTIONS -----

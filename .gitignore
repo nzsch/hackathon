@@ -53,4 +53,6 @@ local.properties
 # Code Recommenders
 .recommenders/
 
+*.swo
+
 *.exe
