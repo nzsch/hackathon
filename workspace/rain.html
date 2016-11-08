@@ -17,11 +17,12 @@ function preload() {
     //game.load.image('atari', 'assets/img/shelter.png');
 	game.load.image('atari', 'assets/img/shelter.png');
     game.load.spritesheet('rain', 'assets/img/rain2.png', 3, 10);
-
+	//game.load.spritesheet('rain', 'assets/img/rain.png', 17, 17);
+//37/45
 }
 
 var atari;
-var balls;
+var raining;
 var cursors;
 
 function create() {
@@ -30,9 +31,9 @@ function create() {
 
     game.stage.backgroundColor = '#2d2d2d';
 
-    balls = game.add.group();
+    raining = game.add.group();
 
-    balls.createMultiple(250, 'rain', 0, false);
+    raining.createMultiple(250, 'rain', 0, false);
 
     atari = game.add.sprite(300, 450, 'atari');
 
@@ -48,35 +49,35 @@ function create() {
 
     game.time.events.loop(150, fire, this);
 
-    game.add.text(16, 16, 'Left / Right to move', { font: '18px Arial', fill: '#ffffff' });
+    //game.add.text(16, 16, 'Left / Right to move', { font: '18px Arial', fill: '#ffffff' });
 
 }
 
 function fire() {
 
-    var ball = balls.getFirstExists(false);
+    var rain = raining.getFirstExists(false);
 
-    if (ball)
+    if (rain)
     {
-        ball.frame = game.rnd.integerInRange(0,6);
-        ball.exists = true;
-        ball.reset(game.world.randomX, 0);
+        rain.frame = game.rnd.integerInRange(0,6);
+        rain.exists = true;
+        rain.reset(game.world.randomX, 0);
 
-        ball.body.bounce.y = 0.0;//0.8;
+        rain.body.bounce.y = 0.0;//0.8;
     }
 
 }
 
-function reflect(a, ball) {
+function reflect(a, rain) {
 
-    if (ball.y > (atari.y + 5))
+    if (rain.y > (atari.y + 5))
     {
         return true;
     }
     else
     {
-        ball.body.velocity.x = atari.body.velocity.x;
-        ball.body.velocity.y *= -(ball.body.bounce.y);
+        rain.body.velocity.x = atari.body.velocity.x;
+        rain.body.velocity.y *= -(rain.body.bounce.y);
 
         return false;
     }
@@ -85,7 +86,7 @@ function reflect(a, ball) {
 
 function update() {
 
-    game.physics.arcade.collide(atari, balls, null, reflect, this);
+    game.physics.arcade.collide(atari, raining, null, reflect, this);
 
     atari.body.velocity.x = 0;
 
@@ -98,15 +99,15 @@ function update() {
         atari.body.velocity.x = 200;
     }
 
-    balls.forEachAlive(checkBounds, this);
+    raining.forEachAlive(checkBounds, this);
 
 }
 
-function checkBounds(ball) {
+function checkBounds(rain) {
 
-    if (ball.y > 600)
+    if (rain.y > 600)
     {
-        ball.kill();
+        rain.kill();
     }
 
 }
