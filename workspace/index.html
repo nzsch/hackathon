@@ -30,6 +30,10 @@
 	   	game.load.image('weather', 'assets/img/weather.png');
 	}
 
+	var toolbar;
+	var seed_sunflower;
+	var seed_acorn;
+	var wateringcan;
 	function create() {
         // Sky color
 		game.stage.backgroundColor = dayColor;
@@ -50,10 +54,15 @@
         // Add click and drag mechanics to tools
         seed_sunflower.inputEnabled = true;
         seed_sunflower.input.enableDrag(true);
+		seed_sunflower.events.onDragStop.add(stopDrag, this)
+
         seed_acorn.inputEnabled = true;
         seed_acorn.input.enableDrag(true);
+		seed_acorn.events.onDragStop.add(stopDrag, this)
+
         wateringcan.inputEnabled = true;
         wateringcan.input.enableDrag(true);
+		wateringcan.events.onDragStop.add(stopDrag, this)
 
         //Draw bitmaps and do required stuff that I dont understand
 		bmd = game.make.bitmapData();
@@ -77,6 +86,26 @@
 			// TODO: Start night time attacks!
 			game.stage.backgroundColor = nightColor;
 		}
+	}
+
+	function stopDrag(sprite, game) {
+		// TODO: Trigger the action?
+		if(sprite.key === "seed_sunflower") {
+			sprite.x = 40
+			sprite.y = 64;
+		} else if (sprite.key === "seed_acorn") {
+			sprite.x = 40
+			sprite.y = 212;
+		} else if (sprite.key === "image_wateringcan") {
+			sprite.x = 19;
+			sprite.y = 138;
+		}
+	}
+
+	function canStopDrag(sprite, game) {
+		// TODO: Reset position
+		// TODO: Trigger the action?
+		console.log('Spit some water');
 	}
 
 	// ----- BEGIN BUTTON FUNCTIONS -----
