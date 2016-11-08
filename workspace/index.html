@@ -114,7 +114,7 @@
 		game.stage.smoothed = false;
 
 		game.weather = new ClearDayState(game);
-		game.time.events.repeat(Phaser.Timer.SECOND , 10000, toggleDay, this);
+		game.time.events.repeat(Phaser.Timer.SECOND * 10, 10000, toggleDay, this);
 	}
 
 	function toggleDay() {
