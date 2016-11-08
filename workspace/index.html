@@ -3,9 +3,12 @@
         <meta charset="UTF-8" />
         <title>hello phaser!</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/2.6.2/phaser.min.js"></script>
+		
     </head>
     <body>
-
+		<script src="states/ClearDayState.js"></script>
+		<script src="states/ClearNightState.js"></script>
+		<script src="states/RainyState.js"></script>
     <script type="text/javascript">
 
     window.onload = function() {
@@ -68,7 +71,7 @@
 
 	function create() {
         // Add the sky
-		addSun();
+		//addSun();
 		game.stage.backgroundColor = dayColor;
 
         // Tile ground
@@ -105,28 +108,24 @@
 		bmd.addToWorld(game.world.centerX, game.world.centerY, 0.5, 0.5, 2, 2);
 		game.stage.smoothed = false;
 
-		game.time.events.repeat(Phaser.Timer.SECOND * 10, 10000, toggleDay, this);
+		game.weather = new ClearDayState(game);
+		game.time.events.repeat(Phaser.Timer.SECOND , 10000, toggleDay, this);
 	}
 
 	function toggleDay() {
 		isDay = !isDay;
+		game.weather.end();
+
 		if(isDay) {
 			// TODO: Stop day time activities
-			removeMoon();
 			if(Math.random() < rainChance) {
-				game.stage.backgroundColor = rainColor;
-				addSunCloud();
+				game.weather = new RainyState(game);
 			} else {
-				game.stage.backgroundColor = dayColor;
-				
-				addSun();
+				game.weather = new ClearDayState(game);
 			}
 		} else {
 			// TODO: Start night time attacks!
-			game.stage.backgroundColor = nightColor;
-			addMoon();
-			removeSunCloud();
-			removeSun();
+			game.weather = new ClearNightState(game);
 		}
 
 	}
@@ -176,7 +175,7 @@
 			seedSprite.visible = false;
 		}
 	}
-
+	/*
 	function addSun(){
 		sunSprite = game.add.sprite(600, 25, 'sun');
 		sunSprite.scale.setTo(0.5,0.5);
@@ -232,8 +231,12 @@
 			moonSprite.visible = false;
 		}
 	}
-
+	*/
 	function update () {
+		// Begin game loop
+
+		// Update weather
+		game.weather.update();
 	}
 
     };
