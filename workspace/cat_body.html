@@ -14,7 +14,7 @@
 	
 
 	
-	var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, render: render });
+	var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, render: render,update: update });
 
 function preload() {
 
@@ -35,7 +35,21 @@ function create() {
 
   //  game.input.onDown.addOnce(changeMummy, this);
 
-}/*
+}
+
+
+function update() {
+
+    bot.x -= 2;
+
+    if (bot.x < -bot.width)
+    {
+        bot.x = game.world.width;
+    }
+
+}
+
+/*
 
 function changeMummy() {
 
