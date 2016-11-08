@@ -13,7 +13,9 @@
 	var bmd;
 	var isDay = true;
 	var dayColor = "#7FEEFF";
-	var nightColor = "#848380";
+	var nightColor = "#3a3f3f";
+	var rainColor = "#a8b5b3";
+	var rainChance = 0.3342; // I got this number from Google. 122/365 (number for NYC)
 
 	function preload() {
 		game.load.image('tile_earth', 'assets/img/tile_earth.png');
@@ -65,8 +67,14 @@
 	function toggleDay() {
 		isDay = !isDay;
 		if(isDay) {
-			game.stage.backgroundColor = dayColor;
+			// TODO: Stop day time activities
+			if(Math.random() < rainChance) {
+				game.stage.backgroundColor = rainColor;
+			} else {
+				game.stage.backgroundColor = dayColor;
+			}
 		} else {
+			// TODO: Start night time attacks!
 			game.stage.backgroundColor = nightColor;
 		}
 	}
