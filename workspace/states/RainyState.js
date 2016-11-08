@@ -6,6 +6,7 @@ class RainyState {
         this.addSunCloud();
         this.addRainCloud();
         this.addCloudy();
+        this.makeRain();
         //this.mySprite = this.add.sprite(x, y, 'image');
     }
 
@@ -18,6 +19,7 @@ class RainyState {
         this.removeSunCloud();
         this.removeRainCloud();
         this.removeCloudy();
+        this.stopRain();
         console.log("Rainy state ending");
     }
 
@@ -54,9 +56,44 @@ class RainyState {
 		}
 	}
 
+    makeRain() {
+
+		this.isRaining = true;
+		this.game.physics.startSystem(Phaser.Physics.ARCADE);
+
+		this.emitter.start(false, 5000, 10, 400);
+
+		//checkBounds(this.emitter);
+		//this.emitter.forEachAlive(checkBounds(), this);
+	}
+
+    stopRain() {
+		if (this.isRaining){
+			this.emitter.on = false;
+			this.isRaining = false;
+		}
+	}
+
+    makeClouds(){
+        
+	}
+
     constructor(game) {
         this.game = game;
-        this.preload();
+        this.emitter = this.game.add.emitter(this.game.world.centerX, 0, 200);
+        this.emitter.width = this.game.world.width;
+		// this.emitter.angle = 30; // uncomment to set an angle for the rain.
+
+		this.emitter.makeParticles('raindrop');
+
+		this.emitter.minParticleScale = 0.1;
+		this.emitter.maxParticleScale = 0.5;
+
+		this.emitter.setYSpeed(300, 500);
+		this.emitter.setXSpeed(-5, 5);
+
+		this.emitter.minRotation = 0;
+		this.emitter.maxRotation = 0;
     }
 
 }

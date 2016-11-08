@@ -29,6 +29,6 @@ class ClearDayState {
 
 	constructor(game) {
 		this.game = game;
-		this.preload();
+		//this.preload();
 	}
 }

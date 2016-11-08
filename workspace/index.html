@@ -3,9 +3,12 @@
         <meta charset="UTF-8" />
         <title>hello phaser!</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/2.6.2/phaser.min.js"></script>
+		
     </head>
     <body>
-
+		<script src="states/ClearDayState.js"></script>
+		<script src="states/ClearNightState.js"></script>
+		<script src="states/RainyState.js"></script>
     <script type="text/javascript">
 
     window.onload = function() {
@@ -78,7 +81,6 @@
 
 	function create() {
         // Add the sky
-		addSun();
 		game.stage.backgroundColor = dayColor;
 
         // Tile ground
@@ -94,7 +96,6 @@
         seed_acorn = game.add.sprite(40, 212, 'seed_acorn');
         seed_acorn.scale.setTo(0.05,0.05);
         wateringcan = game.add.sprite(19, 138, 'image_wateringcan');
-
 
         // Add click and drag mechanics to tools
         seed_sunflower.inputEnabled = true;
@@ -115,31 +116,33 @@
 		bmd.addToWorld(game.world.centerX, game.world.centerY, 0.5, 0.5, 2, 2);
 		game.stage.smoothed = false;
 
-		game.time.events.repeat(Phaser.Timer.SECOND * 10, 10000, toggleDay, this);
+		// Define weather states
+		rainyState = new RainyState(game);
+		clearDayState = new ClearDayState(game);
+		clearNightState = new ClearNightState(game);
+
+		game.weather = new ClearDayState(game);
+		game.weather.preload();
+		game.time.events.repeat(Phaser.Timer.SECOND , 10000, toggleDay, this);
 	}
 
 	function toggleDay() {
 		isDay = !isDay;
+		game.weather.end();
+
 		if(isDay) {
 			// TODO: Stop day time activities
-			hideSprite(moonSprite);
-			if(Math.random() < rainChance) { // raining
-				game.stage.backgroundColor = rainColor;
-				addSunCloud();
-				makeRain();
-			} else { // sunny
-				game.stage.backgroundColor = dayColor;
-				stopRain();
-				addSun();
+			if(Math.random() < rainChance) {
+				game.weather = rainyState;
+			} else {
+				game.weather = clearDayState;
 			}
 		} else {
 			// TODO: Start night time attacks!
-			game.stage.backgroundColor = nightColor;
-			addMoon();
-			hideSprite(sunCloudSprite);
-			hideSprite(sunSprite);
-			stopRain();
+			game.weather = clearNightState;
 		}
+
+		game.weather.preload();
 
 	}
 
@@ -186,86 +189,33 @@
 		seedSprite.scale.setTo(0.05,0.05);
 	}
 
-	function addSun(){
-		sunSprite = game.add.sprite(600, 25, 'sun');
-		sunSprite.scale.setTo(0.5,0.5);
-		//sunSprite.frame = 0;
+
+	function removeSeed() {
+		if(seedSprite) {
+			seedSprite.visible = false;
+		}
 	}
-
-	function addSunCloud(){
-		sunCloudSprite = game.add.sprite(600,25,'sun_cloud');
-		sunCloudSprite.scale.setTo(0.5,0.5);
-	}
-
-
-	function addRainCloud(){
-		rainCloudSprite = game.add.sprite(600,25, 'rain_cloud');
-		rainCloudSprite.scale.setTo(0.5,0.5);
-	}
-
-	function addCloudy(){
-		cloudySprite = game.add.sprite(600,25, 'cloudy');
-		cloudySprite.scale.setTo(0.5,0.5);
-	}
-
-	function addMoon(){
-		moonSprite = game.add.sprite(600,0, 'moon');
-		moonSprite.scale.setTo(0.8,0.8);
-	}
-
-
+	
 	function hideSprite(s) {
 		if(s) {
 			s.visible = false;
 		}
 	}
 
-	function makeRain(){
-
-		isRaining = true;
-		game.physics.startSystem(Phaser.Physics.ARCADE);
-
-		emitter = game.add.emitter(game.world.centerX, 0, 200);
-		emitter.width = game.world.width;
-		// emitter.angle = 30; // uncomment to set an angle for the rain.
-
-		emitter.makeParticles('raindrop');
-
-		emitter.minParticleScale = 0.1;
-		emitter.maxParticleScale = 0.5;
-
-		emitter.setYSpeed(300, 500);
-		emitter.setXSpeed(-5, 5);
-
-		emitter.minRotation = 0;
-		emitter.maxRotation = 0;
-
-		emitter.start(false, 5000, 10, 400);
-
-		//checkBounds(emitter);
-		//emitter.forEachAlive(checkBounds(), this);
-	}
-
-	function stopRain(){
-		if (isRaining){
-			emitter.on = false;
-			isRaining = false;
-		}
-	}
-
-/*
+	/*
 	function checkBounds(thing) {
     	if (thing.y > 600){
         	thing.kill();
         }
     }
     */
-
-	function makeClouds(){
-
-	}
+	
 
 	function update () {
+		// Begin game loop
+
+		// Update weather
+		game.weather.update();
 	}
 
     };
