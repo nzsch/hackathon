@@ -18,11 +18,17 @@
 	var rainChance = 0.3342; // I got this number from Google. 122/365 (number for NYC)
 
 	class Plant {
-		constructor(sprite, health, age, game) {
+		constructor(sprite, x, y, health, age, game) {
 			this.sprite = sprite;
 			this.health = health
 			this.age = age;
 			this.game = game;
+
+			this.sprite = this.game.add.sprite(x, y, sprite);
+			this.sprite.scale.setTo(0.45, 0.45);
+		}
+
+		sprout() {
 		}
 
 		getHealth() {
@@ -43,6 +49,7 @@
 			this.health -= amount;
 		}
 	}
+	
 
 	function preload() {
 		game.load.image('tile_earth', 'assets/img/tile_earth.png');
@@ -57,6 +64,7 @@
 		game.load.image('rain_cloud','assets/img/rain_cloud.png');
 		game.load.image('sun_cloud','assets/img/sun_cloud.png');
 		game.load.image('moon', 'assets/img/moon.png');
+		game.load.image('raindrop', 'assets/img/raindrop.png');
 	}
 
 	var toolbar;
@@ -65,6 +73,8 @@
 	var wateringcan;
 	var sunCloudSprite;
 	var plant;
+	var emitter;
+	var isRaining;
 
 	function create() {
         // Add the sky
@@ -77,7 +87,6 @@
 			ground += game.add.tileSprite(i, 425, 200, 175, 'tile_earth');
 		}
 
-		plant = new Plant('foo', 100, 1, this);
 
         // Add toolbar and tool sprites
 		toolbar = game.add.image(0, 39, 'image_toolbar');
@@ -85,6 +94,7 @@
         seed_acorn = game.add.sprite(40, 212, 'seed_acorn');
         seed_acorn.scale.setTo(0.05,0.05);
         wateringcan = game.add.sprite(19, 138, 'image_wateringcan');
+
 
         // Add click and drag mechanics to tools
         seed_sunflower.inputEnabled = true;
@@ -112,21 +122,23 @@
 		isDay = !isDay;
 		if(isDay) {
 			// TODO: Stop day time activities
-			removeMoon();
-			if(Math.random() < rainChance) {
+			hideSprite(moonSprite);
+			if(Math.random() < rainChance) { // raining
 				game.stage.backgroundColor = rainColor;
 				addSunCloud();
-			} else {
+				makeRain();
+			} else { // sunny
 				game.stage.backgroundColor = dayColor;
-				
+				stopRain();
 				addSun();
 			}
 		} else {
 			// TODO: Start night time attacks!
 			game.stage.backgroundColor = nightColor;
 			addMoon();
-			removeSunCloud();
-			removeSun();
+			hideSprite(sunCloudSprite);
+			hideSprite(sunSprite);
+			stopRain();
 		}
 
 	}
@@ -134,11 +146,15 @@
 	function stopDrag(sprite, game) {
 		// TODO: Trigger the action?
 		if(sprite.key === "seed_sunflower") {
+			plant = new Plant('plant', sprite.x, 250, 100, 1, this);
 			sprite.x = 40
 			sprite.y = 64;
+			// Seed drops and the plant grows after
 		} else if (sprite.key === "seed_acorn") {
+			plant = new Plant('plant', sprite.x, 250, 100, 1, this);
 			sprite.x = 40
 			sprite.y = 212;
+			// Seed drops and the plant grows after
 		} else if (sprite.key === "image_wateringcan") {
 			sprite.x = 19;
 			sprite.y = 138;
@@ -170,23 +186,10 @@
 		seedSprite.scale.setTo(0.05,0.05);
 	}
 
-
-	function removeSeed() {
-		if(seedSprite) {
-			seedSprite.visible = false;
-		}
-	}
-
 	function addSun(){
 		sunSprite = game.add.sprite(600, 25, 'sun');
 		sunSprite.scale.setTo(0.5,0.5);
 		//sunSprite.frame = 0;
-	}
-
-	function removeSun(){
-		if(sunSprite){
-			sunSprite.visible = false;
-		}
 	}
 
 	function addSunCloud(){
@@ -194,21 +197,10 @@
 		sunCloudSprite.scale.setTo(0.5,0.5);
 	}
 
-	function removeSunCloud(){
-		if(sunCloudSprite){
-			sunCloudSprite.visible = false;
-		}
-	}
 
 	function addRainCloud(){
 		rainCloudSprite = game.add.sprite(600,25, 'rain_cloud');
 		rainCloudSprite.scale.setTo(0.5,0.5);
-	}
-
-	function removeRainCloud(){
-		if(rainCloudSprite){
-			rainCloudSprite.visible = false;
-		}
 	}
 
 	function addCloudy(){
@@ -216,21 +208,61 @@
 		cloudySprite.scale.setTo(0.5,0.5);
 	}
 
-	function removeCloudy(){
-		if(cloudySprite){
-			cloudySprite.visible = false;
-		}
-	}
-
 	function addMoon(){
 		moonSprite = game.add.sprite(600,0, 'moon');
 		moonSprite.scale.setTo(0.8,0.8);
 	}
 
-	function removeMoon(){
-		if(moonSprite){
-			moonSprite.visible = false;
+
+	function hideSprite(s) {
+		if(s) {
+			s.visible = false;
 		}
+	}
+
+	function makeRain(){
+
+		isRaining = true;
+		game.physics.startSystem(Phaser.Physics.ARCADE);
+
+		emitter = game.add.emitter(game.world.centerX, 0, 200);
+		emitter.width = game.world.width;
+		// emitter.angle = 30; // uncomment to set an angle for the rain.
+
+		emitter.makeParticles('raindrop');
+
+		emitter.minParticleScale = 0.1;
+		emitter.maxParticleScale = 0.5;
+
+		emitter.setYSpeed(300, 500);
+		emitter.setXSpeed(-5, 5);
+
+		emitter.minRotation = 0;
+		emitter.maxRotation = 0;
+
+		emitter.start(false, 5000, 10, 400);
+
+		//checkBounds(emitter);
+		//emitter.forEachAlive(checkBounds(), this);
+	}
+
+	function stopRain(){
+		if (isRaining){
+			emitter.on = false;
+			isRaining = false;
+		}
+	}
+
+/*
+	function checkBounds(thing) {
+    	if (thing.y > 600){
+        	thing.kill();
+        }
+    }
+    */
+
+	function makeClouds(){
+
 	}
 
 	function update () {
