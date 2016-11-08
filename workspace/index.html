@@ -1,5 +1,4 @@
-<!doctype html>
-<html>
+
     <head>
         <meta charset="UTF-8" />
         <title>hello phaser!</title>
@@ -11,41 +10,71 @@
 
     window.onload = function() {
 	var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, update: update });
+	var bmd;
+	var dropTime = 0;
+	var seedSprite;
+	var plantSprite;
 
-function preload() {
+	function preload() {
+		game.load.image('tile_earth', '../assets/img/tile_earth.png');
+		game.load.image('seed', '../assets/img/seed.png');
+		game.load.image('plant', '../assets/img/plant.png');
+	}
 
-    game.load.image('tile_earth', '../assets/img/tile_earth.png');
-    game.load.image('image_toolbar', '../assets/img/toolbar.png');
+	function create() {
 
-}
+		ground = [];
+		for (var i = 0; i <= 600; i += 200) {
+			ground += game.add.tileSprite(i, 425, 200, 175, 'tile_earth');
+		}
 
-var bmd;
-var area;
-var dropTime = 0;
+		toolbar = game.add.image(0, 39, 'image_toolbar');
+		game.stage.backgroundColor = '#7FEEFF';
 
-function create() {
+		bmd = game.make.bitmapData();
+		bmd.load('tile_earth').cls();
 
-    ground = [];
-    for (var i = 0; i <= 600; i += 200)
-        ground += game.add.tileSprite(i, 425, 200, 175, 'tile_earth');
+		bmd.addToWorld(game.world.centerX, game.world.centerY, 0.5, 0.5, 2, 2);
 
-    toolbar = game.add.image(0, 39, 'image_toolbar');
-	game.stage.backgroundColor = '#7FEEFF';
+		game.stage.smoothed = false;
 
-	bmd = game.make.bitmapData();
-	bmd.load('tile_earth').cls();
+		dropTime = game.time.now + 250;
 
-	bmd.addToWorld(game.world.centerX, game.world.centerY, 0.5, 0.5, 2, 2);
+	}
 
-	game.stage.smoothed = false;
+	// ----- BEGIN BUTTON FUNCTIONS -----
+	function placeSeed() {
+		addSeed();
+		// TODO:
+	}
+	// ----- END BUTTON FUNCTIONS -----
 
-	dropTime = game.time.now + 250;
+	function addPlant() {
+		plantSprite = game.add.sprite(50, 50, 'plant'),
+		plantSprite.scale.setTo(0.05,0.05);
+	}
 
-}
+	// NOTE: Do we even need this?
+	function plantSeed() {
+		if(plantSprite) {
+			plantSprite.visible = false;
+		}
+	}
 
-function update () {
+	function addSeed() {
+		seedSprite = game.add.sprite(50, 50, 'seed'),
+		seedSprite.scale.setTo(0.05,0.05);
+	}
 
-}
+
+	function removeSeed() {
+		if(seedSprite) {
+			seedSprite.visible = false;
+		}
+	}
+
+	function update () {
+	}
 
     };
 
