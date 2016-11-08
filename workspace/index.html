@@ -29,6 +29,7 @@
 		game.load.image('cloudy', 'assets/img/cloudy.png');
 		game.load.image('rain_cloud','assets/img/rain_cloud.png');
 		game.load.image('sun_cloud','assets/img/sun_cloud.png');
+		game.load.image('moon', 'assets/img/moon.png');
 	}
 
 	var toolbar;
@@ -81,6 +82,7 @@
 		isDay = !isDay;
 		if(isDay) {
 			// TODO: Stop day time activities
+			removeMoon();
 			if(Math.random() < rainChance) {
 				game.stage.backgroundColor = rainColor;
 				addSunCloud();
@@ -92,6 +94,7 @@
 		} else {
 			// TODO: Start night time attacks!
 			game.stage.backgroundColor = nightColor;
+			addMoon();
 			removeSunCloud();
 			removeSun();
 		}
@@ -186,6 +189,17 @@
 	function removeCloudy(){
 		if(cloudySprite){
 			cloudySprite.visible = false;
+		}
+	}
+
+	function addMoon(){
+		moonSprite = game.add.sprite(600,0, 'moon');
+		moonSprite.scale.setTo(0.8,0.8);
+	}
+
+	function removeMoon(){
+		if(moonSprite){
+			moonSprite.visible = false;
 		}
 	}
 
