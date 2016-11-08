@@ -17,13 +17,14 @@
 
 	function preload() {
 		game.load.image('tile_earth', 'assets/img/tile_earth.png');
-		game.load.image('seed', 'assets/img/seed.png');
+		game.load.image('seed_acorn', 'assets/img/seed.png');
         game.load.image('seed_sunflower', 'assets/img/seed_sunflower.png');
+        game.load.image('image_wateringcan', 'assets/img/image_wateringcan.png')
 		game.load.image('plant', 'assets/img/plant.png');
 		game.load.image('tile_earth', 'assets/img/tile_earth.png');
 		game.load.image('image_toolbar', 'assets/img/toolbar.png');
 		//preload spritsheet and save coordinate of the image 
-	    	game.load.image('weather', 'assets/img/weather.png');
+        game.load.image('weather', 'assets/img/weather.png');
 	}
 
 	function create() {
@@ -38,11 +39,18 @@
 
         // Add toolbar and tool sprites
 		toolbar = game.add.image(0, 39, 'image_toolbar');
-        seed_sunflower = game.add.sprite(0, 0, 'seed_sunflower');
+        seed_sunflower = game.add.sprite(40, 64, 'seed_sunflower');
+        seed_acorn = game.add.sprite(40, 212, 'seed_acorn');
+        seed_acorn.scale.setTo(0.05,0.05);
+        wateringcan = game.add.sprite(19, 138, 'image_wateringcan');
 
         // Add click and drag mechanics to tools
         seed_sunflower.inputEnabled = true;
         seed_sunflower.input.enableDrag(true);
+        seed_acorn.inputEnabled = true;
+        seed_acorn.input.enableDrag(true);
+        wateringcan.inputEnabled = true;
+        wateringcan.input.enableDrag(true);
 
         //Draw bitmaps and do required stuff that I dont understand
 		bmd = game.make.bitmapData();
