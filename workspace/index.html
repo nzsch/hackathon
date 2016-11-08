@@ -72,18 +72,7 @@
 		bmd.addToWorld(game.world.centerX, game.world.centerY, 0.5, 0.5, 2, 2);
 		game.stage.smoothed = false;
 
-
 		addSun();
-		/*
-		addSunCloud();
-		addCloudy();
-		addRainCloud();
-		*/
-
-		//removeSun();
-		//removeCloudy();
-		//removeSunCloud();
-		//removeRainCloud();
 
 		game.time.events.repeat(Phaser.Timer.SECOND * 10, 10000, toggleDay, this);
 	}
@@ -121,12 +110,7 @@
 			sprite.x = 19;
 			sprite.y = 138;
 		}
-	}
 
-	function canStopDrag(sprite, game) {
-		// TODO: Reset position
-		// TODO: Trigger the action?
-		console.log('Spit some water');
 	}
 
 	// ----- BEGIN BUTTON FUNCTIONS -----
