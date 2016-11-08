@@ -27,7 +27,7 @@ var bot;
 
 function create() {
 
-    bot = game.add.sprite(200, 200, 'bot');
+    bot = game.add.sprite(200, 400, 'bot');
 
     bot.animations.add('run');
 
@@ -40,9 +40,12 @@ function create() {
 
 function update() {
 
-    bot.x -= 2;
-
-    if (bot.x < -bot.width)
+    
+	bot.x += 2;
+//alert(bot.x);
+//alert(bot.width);
+//(game.world.width);
+    if (bot.x < bot.width)
     {
         bot.x = game.world.width;
     }
