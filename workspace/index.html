@@ -91,6 +91,7 @@
         seed_acorn.scale.setTo(0.05,0.05);
         wateringcan = game.add.sprite(19, 138, 'image_wateringcan');
 
+
         // Add click and drag mechanics to tools
         seed_sunflower.inputEnabled = true;
         seed_sunflower.input.enableDrag(true);
@@ -117,7 +118,7 @@
 		isDay = !isDay;
 		if(isDay) {
 			// TODO: Stop day time activities
-			removeMoon();
+			hideSprite(moonSprite);
 			if(Math.random() < rainChance) {
 				game.stage.backgroundColor = rainColor;
 				addSunCloud();
@@ -130,8 +131,8 @@
 			// TODO: Start night time attacks!
 			game.stage.backgroundColor = nightColor;
 			addMoon();
-			removeSunCloud();
-			removeSun();
+			hideSprite(sunCloudSprite);
+			hideSprite(sunSprite);
 		}
 
 	}
@@ -179,23 +180,10 @@
 		seedSprite.scale.setTo(0.05,0.05);
 	}
 
-
-	function removeSeed() {
-		if(seedSprite) {
-			seedSprite.visible = false;
-		}
-	}
-
 	function addSun(){
 		sunSprite = game.add.sprite(600, 25, 'sun');
 		sunSprite.scale.setTo(0.5,0.5);
 		//sunSprite.frame = 0;
-	}
-
-	function removeSun(){
-		if(sunSprite){
-			sunSprite.visible = false;
-		}
 	}
 
 	function addSunCloud(){
@@ -203,21 +191,10 @@
 		sunCloudSprite.scale.setTo(0.5,0.5);
 	}
 
-	function removeSunCloud(){
-		if(sunCloudSprite){
-			sunCloudSprite.visible = false;
-		}
-	}
 
 	function addRainCloud(){
 		rainCloudSprite = game.add.sprite(600,25, 'rain_cloud');
 		rainCloudSprite.scale.setTo(0.5,0.5);
-	}
-
-	function removeRainCloud(){
-		if(rainCloudSprite){
-			rainCloudSprite.visible = false;
-		}
 	}
 
 	function addCloudy(){
@@ -225,20 +202,15 @@
 		cloudySprite.scale.setTo(0.5,0.5);
 	}
 
-	function removeCloudy(){
-		if(cloudySprite){
-			cloudySprite.visible = false;
-		}
-	}
-
 	function addMoon(){
 		moonSprite = game.add.sprite(600,0, 'moon');
 		moonSprite.scale.setTo(0.8,0.8);
 	}
 
-	function removeMoon(){
-		if(moonSprite){
-			moonSprite.visible = false;
+
+	function hideSprite(s) {
+		if(s) {
+			s.visible = false;
 		}
 	}
 
