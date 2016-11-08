@@ -17,6 +17,33 @@
 	var rainColor = "#a8b5b3";
 	var rainChance = 0.3342; // I got this number from Google. 122/365 (number for NYC)
 
+	class Plant {
+		constructor(sprite, health, age, game) {
+			this.sprite = sprite;
+			this.health = health
+			this.age = age;
+			this.game = game;
+		}
+
+		getHealth() {
+			return this.health;
+		}
+
+		getAge() {
+			return this.age;
+		}
+
+		incrementAge() {
+			// TODO: make the plant taller
+			this.age +=1;
+		}
+
+		inflictDamage(amount) {
+			// TODO: change overlay color depending on buckets of 1-5
+			this.health -= amount;
+		}
+	}
+
 	function preload() {
 		game.load.image('tile_earth', 'assets/img/tile_earth.png');
 		game.load.image('seed_acorn', 'assets/img/seed.png');
@@ -37,8 +64,11 @@
 	var seed_acorn;
 	var wateringcan;
 	var sunCloudSprite;
+	var plant;
+
 	function create() {
-        // Sky color
+        // Add the sky
+		addSun();
 		game.stage.backgroundColor = dayColor;
 
         // Tile ground
@@ -46,6 +76,8 @@
 		for (var i = 0; i <= 600; i += 200) {
 			ground += game.add.tileSprite(i, 425, 200, 175, 'tile_earth');
 		}
+
+		plant = new Plant('foo', 100, 1, this);
 
         // Add toolbar and tool sprites
 		toolbar = game.add.image(0, 39, 'image_toolbar');
@@ -72,8 +104,6 @@
 		bmd.load('tile_earth').cls();
 		bmd.addToWorld(game.world.centerX, game.world.centerY, 0.5, 0.5, 2, 2);
 		game.stage.smoothed = false;
-
-		addSun();
 
 		game.time.events.repeat(Phaser.Timer.SECOND * 10, 10000, toggleDay, this);
 	}
