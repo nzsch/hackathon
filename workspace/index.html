@@ -18,30 +18,38 @@
 	function preload() {
 		game.load.image('tile_earth', 'assets/img/tile_earth.png');
 		game.load.image('seed', 'assets/img/seed.png');
+        game.load.image('seed_sunflower', 'assets/img/seed_sunflower.png');
 		game.load.image('plant', 'assets/img/plant.png');
 		game.load.image('tile_earth', 'assets/img/tile_earth.png');
 		game.load.image('image_toolbar', 'assets/img/toolbar.png');
+        
 	}
 
 	function create() {
+        // Sky color
+		game.stage.backgroundColor = '#7FEEFF';
 
+        // Tile ground
 		ground = [];
 		for (var i = 0; i <= 600; i += 200) {
 			ground += game.add.tileSprite(i, 425, 200, 175, 'tile_earth');
 		}
 
+        // Add toolbar and tool sprites
 		toolbar = game.add.image(0, 39, 'image_toolbar');
-		game.stage.backgroundColor = '#7FEEFF';
+        seed_sunflower = game.add.sprite(0, 0, 'seed_sunflower');
 
+        // Add click and drag mechanics to tools
+        seed_sunflower.inputEnabled = true;
+        seed_sunflower.input.enableDrag(true);
+
+        //Draw bitmaps and do required stuff that I dont understand
 		bmd = game.make.bitmapData();
 		bmd.load('tile_earth').cls();
-
 		bmd.addToWorld(game.world.centerX, game.world.centerY, 0.5, 0.5, 2, 2);
-
 		game.stage.smoothed = false;
-
 		dropTime = game.time.now + 250;
-
+        
 	}
 
 	// ----- BEGIN BUTTON FUNCTIONS -----
@@ -81,6 +89,6 @@
     };
 
     </script>
-
+    
     </body>
 </html>
