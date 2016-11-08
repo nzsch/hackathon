@@ -15,6 +15,7 @@
 function preload() {
 
     game.load.image('tile_earth', '../assets/img/tile_earth.png');
+    game.load.image('image_toolbar', '../assets/img/toolbar.png');
 
 }
 
@@ -28,6 +29,7 @@ function create() {
     for (var i = 0; i <= 600; i += 200)
         ground += game.add.tileSprite(i, 425, 200, 175, 'tile_earth');
 
+    toolbar = game.add.image(0, 39, 'image_toolbar');
 	game.stage.backgroundColor = '#7FEEFF';
 
 	bmd = game.make.bitmapData();
@@ -37,24 +39,11 @@ function create() {
 
 	game.stage.smoothed = false;
 
-	area = new Phaser.Rectangle(0, bmd.height, bmd.width, 1);
-
 	dropTime = game.time.now + 250;
 
 }
 
 function update () {
-
-	if (area.y > 0 && game.time.now > dropTime)
-	{
-		for (var y = 0; y < area.y; y++)
-		{
-			bmd.copyRect('pic', area, 0, y);
-		}
-
-		area.y--;
-		dropTime = game.time.now + 25;
-	}
 
 }
 
