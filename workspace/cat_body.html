@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>hello phaser!</title>
+        <script src="http://qallsolutions.com/scholastic/hackaton/build/phaser.min.js"></script>
+    </head>
+    <body>
+
+    <script type="text/javascript">
+
+    window.onload = function() {
+	
+	
+
+	
+	var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, render: render,update: update });
+
+function preload() {
+
+  game.load.atlasJSONHash('bot', 'assets/img/cat.png', 'assets/img/running_cat.json');
+ // game.load.spritesheet('mummy', 'assets/sprites/metalslug_mummy37x45.png', 153, 204, 18);
+
+}
+
+var bot;
+
+function create() {
+
+    bot = game.add.sprite(200, 200, 'bot');
+
+    bot.animations.add('run');
+
+    bot.animations.play('run', 15, true);
+
+  //  game.input.onDown.addOnce(changeMummy, this);
+
+}
+
+
+function update() {
+
+    bot.x -= 2;
+
+    if (bot.x < -bot.width)
+    {
+        bot.x = game.world.width;
+    }
+
+}
+
+/*
+
+function changeMummy() {
+
+    bot.loadTexture('mummy', 0);
+
+    bot.animations.add('walk');
+
+    bot.animations.play('walk', 30, true);
+
+}*/
+
+function render() {
+
+    game.debug.body(bot);
+
+}
+	
+	
+	
+    };
+
+    </script>
+
+    </body>
+</html>
