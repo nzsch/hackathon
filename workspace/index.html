@@ -35,6 +35,7 @@
 	var seed_sunflower;
 	var seed_acorn;
 	var wateringcan;
+	var sunCloudSprite;
 	function create() {
         // Sky color
 		game.stage.backgroundColor = dayColor;
@@ -71,15 +72,18 @@
 		bmd.addToWorld(game.world.centerX, game.world.centerY, 0.5, 0.5, 2, 2);
 		game.stage.smoothed = false;
 
+
 		addSun();
+		/*
 		addSunCloud();
 		addCloudy();
 		addRainCloud();
+		*/
 
-		removeSun();
-		removeCloudy();
-		removeSunCloud();
-		removeRainCloud();
+		//removeSun();
+		//removeCloudy();
+		//removeSunCloud();
+		//removeRainCloud();
 
 		game.time.events.repeat(Phaser.Timer.SECOND * 10, 10000, toggleDay, this);
 	}
@@ -90,12 +94,17 @@
 			// TODO: Stop day time activities
 			if(Math.random() < rainChance) {
 				game.stage.backgroundColor = rainColor;
+				addSunCloud();
 			} else {
 				game.stage.backgroundColor = dayColor;
+				
+				addSun();
 			}
 		} else {
 			// TODO: Start night time attacks!
 			game.stage.backgroundColor = nightColor;
+			removeSunCloud();
+			removeSun();
 		}
 
 	}
