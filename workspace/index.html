@@ -25,15 +25,17 @@
 		game.load.image('plant', 'assets/img/plant.png');
 		game.load.image('tile_earth', 'assets/img/tile_earth.png');
 		game.load.image('image_toolbar', 'assets/img/toolbar.png');
-		//preload spritsheet and save coordinate of the image 
-        game.load.image('weather', 'assets/img/weather.png');
-	   	game.load.image('weather', 'assets/img/weather.png');
+		game.load.image('sun', 'assets/img/sun.png');
+		game.load.image('cloudy', 'assets/img/cloudy.png');
+		game.load.image('rain_cloud','assets/img/rain_cloud.png');
+		game.load.image('sun_cloud','assets/img/sun_cloud.png');
 	}
 
 	var toolbar;
 	var seed_sunflower;
 	var seed_acorn;
 	var wateringcan;
+	var sunCloudSprite;
 	function create() {
         // Sky color
 		game.stage.backgroundColor = dayColor;
@@ -70,6 +72,8 @@
 		bmd.addToWorld(game.world.centerX, game.world.centerY, 0.5, 0.5, 2, 2);
 		game.stage.smoothed = false;
 
+		addSun();
+
 		game.time.events.repeat(Phaser.Timer.SECOND * 10, 10000, toggleDay, this);
 	}
 
@@ -79,13 +83,19 @@
 			// TODO: Stop day time activities
 			if(Math.random() < rainChance) {
 				game.stage.backgroundColor = rainColor;
+				addSunCloud();
 			} else {
 				game.stage.backgroundColor = dayColor;
+				
+				addSun();
 			}
 		} else {
 			// TODO: Start night time attacks!
 			game.stage.backgroundColor = nightColor;
+			removeSunCloud();
+			removeSun();
 		}
+
 	}
 
 	function stopDrag(sprite, game) {
@@ -100,12 +110,7 @@
 			sprite.x = 19;
 			sprite.y = 138;
 		}
-	}
 
-	function canStopDrag(sprite, game) {
-		// TODO: Reset position
-		// TODO: Trigger the action?
-		console.log('Spit some water');
 	}
 
 	// ----- BEGIN BUTTON FUNCTIONS -----
@@ -136,6 +141,51 @@
 	function removeSeed() {
 		if(seedSprite) {
 			seedSprite.visible = false;
+		}
+	}
+
+	function addSun(){
+		sunSprite = game.add.sprite(600, 25, 'sun');
+		sunSprite.scale.setTo(0.5,0.5);
+		//sunSprite.frame = 0;
+	}
+
+	function removeSun(){
+		if(sunSprite){
+			sunSprite.visible = false;
+		}
+	}
+
+	function addSunCloud(){
+		sunCloudSprite = game.add.sprite(600,25,'sun_cloud');
+		sunCloudSprite.scale.setTo(0.5,0.5);
+	}
+
+	function removeSunCloud(){
+		if(sunCloudSprite){
+			sunCloudSprite.visible = false;
+		}
+	}
+
+	function addRainCloud(){
+		rainCloudSprite = game.add.sprite(600,25, 'rain_cloud');
+		rainCloudSprite.scale.setTo(0.5,0.5);
+	}
+
+	function removeRainCloud(){
+		if(rainCloudSprite){
+			rainCloudSprite.visible = false;
+		}
+	}
+
+	function addCloudy(){
+		cloudySprite = game.add.sprite(600,25, 'cloudy');
+		cloudySprite.scale.setTo(0.5,0.5);
+	}
+
+	function removeCloudy(){
+		if(cloudySprite){
+			cloudySprite.visible = false;
 		}
 	}
 
