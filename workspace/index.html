@@ -175,10 +175,10 @@
 
 		game.weather = new ClearDayState(game);
 		game.weather.preload();
-		game.time.events.repeat(Phaser.Timer.SECOND * 5, 10000, toggleDay, this);
+		game.time.events.repeat(Phaser.Timer.SECOND * 5, 10000, tick, this);
 	}
 
-	function toggleDay() {
+	function tick() {
 		isDay = !isDay;
 		game.weather.end();
 
@@ -270,30 +270,6 @@
 			s.visible = false;
 		}
 	}
-
-	// function makeRain(){
-
-	// 	isRaining = true;
-	// 	game.physics.startSystem(Phaser.Physics.ARCADE);
-
-	// 	emitter = game.add.emitter(game.world.centerX, 0, 200);
-	// 	emitter.width = game.world.width;
-	// 	// emitter.angle = 30; // uncomment to set an angle for the rain.
-
-	// 	emitter.makeParticles('raindrop');
-
-	// 	emitter.minParticleScale = 0.1;
-	// 	emitter.maxParticleScale = 0.5;
-
-	// 	emitter.setYSpeed(300, 500);
-	// 	emitter.setXSpeed(-5, 5);
-
-	// 	emitter.minRotation = 0;
-	// 	emitter.maxRotation = 0;
-
-	// 	emitter.start(false, 5000, 10, 400);
-
-	// }
 
 	function stopRain(){
 		if (isRaining){
