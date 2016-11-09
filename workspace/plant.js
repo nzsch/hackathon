@@ -46,6 +46,7 @@ class Plant {
 	}
 
 	update() {
-		//this.sprite.frameName = 'run'+ (this.age++);
+		var a = this.age + 1;
+		this.sprite.frameName = 'run'+ (a);
 	}
 }
