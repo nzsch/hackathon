@@ -20,7 +20,17 @@
 	var nightColor = "#3a3f3f";
 	var rainColor = "#a8b5b3";
 	var rainChance = 0.3342; // I got this number from Google. 122/365 (number for NYC)
-	var funFacts = ["plants are green", "plants are cool", "this is a fun fact"];
+	var funFacts = ["plants are green", "plants are cool", "this is a fun fact",
+	"1",
+	"2",
+	"3",
+	"4",
+	"5",
+	"6",
+	"7",
+	"8",
+	"9",
+	];
 	var toolbar;
 	var seed_sunflower;
 	var seed_acorn;
@@ -62,7 +72,7 @@
 			ground += game.add.tileSprite(i, 425, 200, 175, 'tile_earth');
 		}
 
-		infoFunFact = game.add.text(100, 200, "", {
+		infoFunFact = game.add.text(400, 450, "Fun Fact:\n"+funFacts[0], {
 			font: "45px Arial",
 			fill: "#ff0044",
 			align: "center"
@@ -154,7 +164,7 @@
 		}
 
 		if(isDay) {
-			infoFunFact.setText(funFacts[parseInt(Math.random()*funFacts.length)]);
+			infoFunFact.setText("Fun Fact:\n" + funFacts[parseInt(Math.random()*funFacts.length)]);
 
 			if(Math.random() < rainChance) {
 				game.weather = rainyState;
