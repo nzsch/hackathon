@@ -32,6 +32,10 @@
 			this.sprite.scale.setTo(0.45, 0.45);
 		}
 
+		static getMaxAge() {
+			return 16;
+		}
+
 		getHealth() {
 			return this.health;
 		}
@@ -265,6 +269,15 @@
 			infoWater.setText("Water: " + plants[0].getWater());
 			infoHealth.setText("Health: " + plants[0].getHealth()); 
 			infoAge.setText("Age: " + plants[0].getAge());
+		}
+
+		// Let's see if we win or lose
+		if(plants && plants[0]) {
+			if(plants[0].getHealth() <= 0 || plants[0].getWater() <= 0) {
+				console.log('YOU LOSE');
+			} else if(plants[0].getAge() > Plant.getMaxAge()) {
+				console.log('YOU WIN');
+			}
 		}
 	}
 
