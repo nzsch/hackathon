@@ -80,7 +80,7 @@ class RainyState {
 
     constructor(game) {
         this.game = game;
-        this.emitter = this.game.add.emitter(this.game.world.centerX, 0, 200);
+        this.emitter = this.game.add.emitter(this.game.world.centerX, 0, 500);
         this.emitter.width = this.game.world.width;
 		// this.emitter.angle = 30; // uncomment to set an angle for the rain.
 
