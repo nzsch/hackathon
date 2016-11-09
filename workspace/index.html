@@ -9,6 +9,7 @@
 		<script src="states/ClearDayState.js"></script>
 		<script src="states/ClearNightState.js"></script>
 		<script src="states/RainyState.js"></script>
+		<script src="plant.js"></script>
     <script type="text/javascript">
 
     window.onload = function() {
@@ -19,70 +20,16 @@
 	var nightColor = "#3a3f3f";
 	var rainColor = "#a8b5b3";
 	var rainChance = 0.3342; // I got this number from Google. 122/365 (number for NYC)
-
-	class Plant {
-		constructor(sprite, x, y, health, game) {
-			this.sprite = sprite;
-			this.health = health
-			this.age = 0;
-			this.game = game;
-			this.water = 100;
-
-			this.sprite = this.game.add.sprite(x, y, sprite);
-			this.sprite.scale.setTo(1.5, 1.5);
-		}
-
-		static getMaxAge() {
-			return 16;
-		}
-
-		getHealth() {
-			return this.health;
-		}
-
-		getAge() {
-			return this.age;
-		}
-
-		getWater() {
-			return this.water;
-		}
-
-		decrementWater(amount) {
-			this.water -= amount;
-			if (this.water < 0)
-				this.water = 0;
-		}
-
-		incrementWater(amount) {
-			this.water += amount;
-			if (this.water > 100)
-				this.water = 100;
-		}
-
-		incrementAge() {
-			// TODO: make the plant taller
-			this.age +=1;
-		}
-
-		incrementHealth(amount) {
-			this.health += amount;
-			if (this.health > 100)
-				this.health = 100;
-		}
-
-		inflictDamage(amount) {
-			// TODO: change overlay color depending on buckets of 1-5
-			this.health -= amount;
-			if (this.health < 0)
-				this.health = 0;
-		}
-
-		update() {
-			this.sprite.frameName = 'run'+ (this.age++);
-		}
-	}
-	
+	var funFacts = ["plants are green", "plants are cool", "this is a fun fact"];
+	var toolbar;
+	var seed_sunflower;
+	var seed_acorn;
+	var wateringcan;
+	var sunCloudSprite;
+	var plant;
+	var emitter;
+	var isRaining;
+	var plants;
 
 	function preload() {
 		game.load.image('tile_earth', 'assets/img/tile_earth.png');
@@ -102,15 +49,6 @@
 		game.load.atlasJSONHash('plant', 'assets/img/germination.png', 'assets/img/plant.json');
 	}
 
-	var toolbar;
-	var seed_sunflower;
-	var seed_acorn;
-	var wateringcan;
-	var sunCloudSprite;
-	var plant;
-	var emitter;
-	var isRaining;
-	var plants;
 
 	function create() {
         // Add the sky
@@ -124,6 +62,12 @@
 		for (var i = 0; i <= 600; i += 200) {
 			ground += game.add.tileSprite(i, 425, 200, 175, 'tile_earth');
 		}
+
+		infoFunFact = game.add.text(100, 200, "", {
+			font: "45px Arial",
+			fill: "#ff0044",
+			align: "center"
+		});
 
 		infoWater = game.add.text(100, 450, "Water: ", {
 			font: "45px Arial",
@@ -211,6 +155,8 @@
 		}
 
 		if(isDay) {
+			infoFunFact.setText(funFacts[parseInt(Math.random()*funFacts.length)]);
+
 			if(Math.random() < rainChance) {
 				game.weather = rainyState;
 			} else {
