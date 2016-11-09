@@ -29,7 +29,7 @@
 			this.water = 100;
 
 			this.sprite = this.game.add.sprite(x, y, sprite);
-			this.sprite.scale.setTo(0.45, 0.45);
+			this.sprite.scale.setTo(1.5, 1.5);
 		}
 
 		static getMaxAge() {
@@ -75,6 +75,12 @@
 		inflictDamage(amount) {
 			// TODO: change overlay color depending on buckets of 1-5
 			this.health -= amount;
+			if (this.health < 0)
+				this.health = 0;
+		}
+
+		update() {
+			this.sprite.frameName = 'run'+ (this.age++);
 		}
 	}
 	
@@ -84,7 +90,7 @@
 		game.load.image('seed_acorn', 'assets/img/seed.png');
         game.load.image('seed_sunflower', 'assets/img/seed_sunflower.png');
         game.load.image('image_wateringcan', 'assets/img/image_wateringcan.png')
-		game.load.image('plant', 'assets/img/plant.png');
+		//game.load.image('plant', 'assets/img/plant.png');
 		game.load.image('tile_earth', 'assets/img/tile_earth.png');
 		game.load.image('image_toolbar', 'assets/img/toolbar.png');
 		game.load.image('sun', 'assets/img/sun.png');
@@ -94,6 +100,7 @@
 		game.load.image('moon', 'assets/img/moon.png');
 		game.load.image('raindrop', 'assets/img/raindrop.png');
 		game.load.image('food', 'assets/img/food.png');
+		game.load.atlasJSONHash('plant', 'assets/img/germination.png', 'assets/img/plant.json');
 	}
 
 	var toolbar;
@@ -175,7 +182,7 @@
 
 		game.weather = new ClearDayState(game);
 		game.weather.preload();
-		game.time.events.repeat(Phaser.Timer.SECOND * 5, 10000, tick, this);
+		game.time.events.repeat(Phaser.Timer.SECOND, 10000, tick, this);
 	}
 
 	function tick() {
@@ -203,6 +210,7 @@
 			game.weather = clearNightState;
 			for(var i = 0; i < plants.length; i++) {
 				plants[i].inflictDamage(5);
+				plants[i].update();
 			}
 		}
 		game.weather.preload();
@@ -211,14 +219,14 @@
 	function stopDrag(sprite, game) {
 		if(sprite.key === "seed_sunflower") {
 			if(plants && plants.length < 1) {
-				plants.push(new Plant('plant', sprite.x, 250, 100, this));
+				plants.push(new Plant('plant', sprite.x, 278, 100, this));
 			}
 			sprite.x = 40
 			sprite.y = 64;
 			// Seed drops and the plant grows after
 		} else if (sprite.key === "seed_acorn") {
 			if(plants && plants.length < 1) {
-				plants.push(new Plant('plant', sprite.x, 250, 100, this));
+				plants.push(new Plant('plant', sprite.x, 278, 100, this));
 			}
 			sprite.x = 40
 			sprite.y = 212;
