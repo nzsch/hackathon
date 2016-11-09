@@ -47,6 +47,10 @@
 			this.age +=1;
 		}
 
+		incrementHealth(amount) {
+			this.health += amount;
+		}
+
 		inflictDamage(amount) {
 			// TODO: change overlay color depending on buckets of 1-5
 			this.health -= amount;
@@ -134,29 +138,25 @@
 		isDay = !isDay;
 		game.weather.end();
 
-
 		if(isDay) {
 			// If the plant lived, then we should make it age
 			for(var i = 0; i < plants.length; i++) {
 				plants[i].incrementAge();
+				console.log(plants[i].getHealth());
 			}
-			// TODO: Stop day time activities
+
 			if(Math.random() < rainChance) {
 				game.weather = rainyState;
 			} else {
 				game.weather = clearDayState;
 			}
-		} else {
-			// TODO: Start night time attacks!
+		} else { // NOTE: 
 			game.weather = clearNightState;
 		}
-
 		game.weather.preload();
-
 	}
 
 	function stopDrag(sprite, game) {
-		// TODO: Trigger the action?
 		if(sprite.key === "seed_sunflower") {
 			if(plants && plants.length < 2) {
 				plants.push(new Plant('plant', sprite.x, 250, 100, this));
@@ -172,18 +172,18 @@
 			sprite.y = 212;
 			// Seed drops and the plant grows after
 		} else if (sprite.key === "image_wateringcan") {
+			// TODO: Figure out a range of 50px and add health to a plant under it
+			for(var i = 0; i < plants.length; i++) {
+				if(Math.abs(plants[i].sprite.x - sprite.x) < 75) {
+					plants[i].incrementHealth(50);
+				}
+			}
+			// Reset the watering can position
 			sprite.x = 19;
 			sprite.y = 138;
 		}
 
 	}
-
-	// ----- BEGIN BUTTON FUNCTIONS -----
-	function placeSeed() {
-		addSeed();
-		// TODO:
-	}
-	// ----- END BUTTON FUNCTIONS -----
 
 	function addPlant() {
 		plantSprite = game.add.sprite(50, 50, 'plant'),
