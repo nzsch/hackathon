@@ -62,7 +62,6 @@
 
 		incrementAge() {
 			// TODO: make the plant taller
-			this.inflictDamage(5);
 			this.age +=1;
 		}
 
@@ -189,6 +188,28 @@
 		isDay = !isDay;
 		game.weather.end();
 
+		if(plants && plants[0] && plants[0].health < 0) {
+			if(typeof loseText === 'undefined') {
+				loseText = game.add.text(200, 200, "LOSER\n$5 to play again", {
+					font: "45px Arial",
+					fill: "#ff0044",
+					align: "center"
+				});
+			}
+			return;
+		}
+
+		if(plants && plants[0] && plants[0].age > Plant.getMaxAge()) {
+			if(typeof winText === 'undefined') {
+				winText = game.add.text(300, 200, "WINNER\nMore DLC at scholastic.com", {
+					font: "45px Arial",
+					fill: "#ff0044",
+					align: "center"
+				});
+			}
+			return;
+		}
+
 		if(isDay) {
 			if(Math.random() < rainChance) {
 				game.weather = rainyState;
@@ -200,9 +221,9 @@
 			for(var i = 0; i < plants.length; i++) {
 				plants[i].incrementAge();
 				if(game.weather === rainyState) {
-					plants[i].incrementWater(5);
+					plants[i].incrementWater(2);
 				} else {
-					plants[i].decrementWater(10);
+					plants[i].decrementWater(15);
 				}
 			}
 
@@ -235,7 +256,7 @@
 			// TODO: Figure out a range of 50px and add health to a plant under it
 			for(var i = 0; i < plants.length; i++) {
 				if(Math.abs(plants[i].sprite.x - sprite.x) < 175) {
-					plants[i].incrementWater(20);
+					plants[i].incrementWater(15);
 					plants[i].incrementHealth(10);
 				}
 			}
@@ -295,15 +316,6 @@
 			infoWater.setText("Water: " + plants[0].getWater());
 			infoHealth.setText("Health: " + plants[0].getHealth()); 
 			infoAge.setText("Age: " + plants[0].getAge());
-		}
-
-		// Let's see if we win or lose
-		if(plants && plants[0]) {
-			if(plants[0].getHealth() <= 0 || plants[0].getWater() <= 0) {
-				console.log('YOU LOSE');
-			} else if(plants[0].getAge() > Plant.getMaxAge()) {
-				console.log('YOU WIN');
-			}
 		}
 	}
 
