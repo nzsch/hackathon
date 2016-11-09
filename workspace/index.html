@@ -50,20 +50,26 @@
 
 		decrementWater(amount) {
 			this.water -= amount;
+			if (this.water < 0)
+				this.water = 0;
 		}
 
 		incrementWater(amount) {
 			this.water += amount;
+			if (this.water > 100)
+				this.water = 100;
 		}
 
 		incrementAge() {
 			// TODO: make the plant taller
-			this.health +=5 ;
+			this.inflictDamage(5);
 			this.age +=1;
 		}
 
 		incrementHealth(amount) {
 			this.health += amount;
+			if (this.health > 100)
+				this.health = 100;
 		}
 
 		inflictDamage(amount) {
@@ -192,8 +198,12 @@
 					plants[i].decrementWater(10);
 				}
 			}
+
 		} else { // NOTE: 
 			game.weather = clearNightState;
+			for(var i = 0; i < plants.length; i++) {
+				plants[i].inflictDamage(5);
+			}
 		}
 		game.weather.preload();
 	}
@@ -216,8 +226,9 @@
 		} else if (sprite.key === "image_wateringcan") {
 			// TODO: Figure out a range of 50px and add health to a plant under it
 			for(var i = 0; i < plants.length; i++) {
-				if(Math.abs(plants[i].sprite.x - sprite.x) < 75) {
-					plants[i].incrementHealth(50);
+				if(Math.abs(plants[i].sprite.x - sprite.x) < 175) {
+					plants[i].incrementWater(20);
+					plants[i].incrementHealth(10);
 				}
 			}
 			// Reset the watering can position
@@ -260,40 +271,35 @@
 		}
 	}
 
-	function makeRain(){
+	// function makeRain(){
 
-		isRaining = true;
-		game.physics.startSystem(Phaser.Physics.ARCADE);
+	// 	isRaining = true;
+	// 	game.physics.startSystem(Phaser.Physics.ARCADE);
 
-		emitter = game.add.emitter(game.world.centerX, 0, 200);
-		emitter.width = game.world.width;
-		// emitter.angle = 30; // uncomment to set an angle for the rain.
+	// 	emitter = game.add.emitter(game.world.centerX, 0, 200);
+	// 	emitter.width = game.world.width;
+	// 	// emitter.angle = 30; // uncomment to set an angle for the rain.
 
-		emitter.makeParticles('raindrop');
+	// 	emitter.makeParticles('raindrop');
 
-		emitter.minParticleScale = 0.1;
-		emitter.maxParticleScale = 0.5;
+	// 	emitter.minParticleScale = 0.1;
+	// 	emitter.maxParticleScale = 0.5;
 
-		emitter.setYSpeed(300, 500);
-		emitter.setXSpeed(-5, 5);
+	// 	emitter.setYSpeed(300, 500);
+	// 	emitter.setXSpeed(-5, 5);
 
-		emitter.minRotation = 0;
-		emitter.maxRotation = 0;
+	// 	emitter.minRotation = 0;
+	// 	emitter.maxRotation = 0;
 
-		emitter.start(false, 5000, 10, 400);
+	// 	emitter.start(false, 5000, 10, 400);
 
-	}
+	// }
 
 	function stopRain(){
 		if (isRaining){
 			emitter.on = false;
 			isRaining = false;
 		}
-	}
-
-
-	function makeClouds(){
-
 	}
 
 	function update () {
