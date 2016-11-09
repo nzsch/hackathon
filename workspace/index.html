@@ -32,6 +32,10 @@
 			this.sprite.scale.setTo(0.45, 0.45);
 		}
 
+		static getMaxAge() {
+			return 16;
+		}
+
 		getHealth() {
 			return this.health;
 		}
@@ -108,6 +112,23 @@
 			ground += game.add.tileSprite(i, 425, 200, 175, 'tile_earth');
 		}
 
+		infoWater = game.add.text(100, 450, "Water: ", {
+			font: "45px Arial",
+			fill: "#ff0044",
+			align: "center"
+		});
+
+		infoHealth = game.add.text(100, 500, "Health: ", {
+			font: "45px Arial",
+			fill: "#ff0044",
+			align: "center"
+		});
+
+		infoAge = game.add.text(100, 550, "Age: ", {
+			font: "45px Arial",
+			fill: "#ff0044",
+			align: "center"
+		});
 
         // Add toolbar and tool sprites
 		toolbar = game.add.image(0, 39, 'image_toolbar');
@@ -173,14 +194,14 @@
 
 	function stopDrag(sprite, game) {
 		if(sprite.key === "seed_sunflower") {
-			if(plants && plants.length < 2) {
+			if(plants && plants.length < 1) {
 				plants.push(new Plant('plant', sprite.x, 250, 100, this));
 			}
 			sprite.x = 40
 			sprite.y = 64;
 			// Seed drops and the plant grows after
 		} else if (sprite.key === "seed_acorn") {
-			if(plants && plants.length < 2) {
+			if(plants && plants.length < 1) {
 				plants.push(new Plant('plant', sprite.x, 250, 100, this));
 			}
 			sprite.x = 40
@@ -230,20 +251,61 @@
 		}
 	}
 
-	/*
-	function checkBounds(thing) {
-    	if (thing.y > 600){
-        	thing.kill();
-        }
-    }
-    */
-	
+	function makeRain(){
+
+		isRaining = true;
+		game.physics.startSystem(Phaser.Physics.ARCADE);
+
+		emitter = game.add.emitter(game.world.centerX, 0, 200);
+		emitter.width = game.world.width;
+		// emitter.angle = 30; // uncomment to set an angle for the rain.
+
+		emitter.makeParticles('raindrop');
+
+		emitter.minParticleScale = 0.1;
+		emitter.maxParticleScale = 0.5;
+
+		emitter.setYSpeed(300, 500);
+		emitter.setXSpeed(-5, 5);
+
+		emitter.minRotation = 0;
+		emitter.maxRotation = 0;
+
+		emitter.start(false, 5000, 10, 400);
+
+	}
+
+	function stopRain(){
+		if (isRaining){
+			emitter.on = false;
+			isRaining = false;
+		}
+	}
+
+
+	function makeClouds(){
+
+	}
 
 	function update () {
 		// Begin game loop
 
 		// Update weather
 		game.weather.update();
+		if(plants[0]) {
+			infoWater.setText("Water: " + plants[0].getWater());
+			infoHealth.setText("Health: " + plants[0].getHealth()); 
+			infoAge.setText("Age: " + plants[0].getAge());
+		}
+
+		// Let's see if we win or lose
+		if(plants && plants[0]) {
+			if(plants[0].getHealth() <= 0 || plants[0].getWater() <= 0) {
+				console.log('YOU LOSE');
+			} else if(plants[0].getAge() > Plant.getMaxAge()) {
+				console.log('YOU WIN');
+			}
+		}
 	}
 
     };
