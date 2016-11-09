@@ -9,6 +9,7 @@
 	<script src="states/ClearDayState.js"></script>
 	<script src="states/ClearNightState.js"></script>
 	<script src="states/RainyState.js"></script>
+	<script src="plant.js"></script>
     <script type="text/javascript">
 
     window.onload = function() {
@@ -84,6 +85,24 @@
 		}
 	}
 	
+	// tbh I stole them from here: http://www.sciencekids.co.nz/sciencefacts/plants.html
+	var funFacts = [
+	"Tree resin which\nhas been fossilized\nis known as amber.",
+	"Some plants are\ncarnivores like\nthe Venus Flytrap.",
+	"Bamboo grow almost\na metre (3.28 feet)\nin just one day!",
+	"Plants turn C02\ninto food in a process\ncalled photosynthesis.",
+	"Around 2000 different\ntypes of plants\nare used as food.",
+	"Poison ivy produces\na skin irritant\ncalled urushiol.",
+	];
+	var toolbar;
+	var seed_sunflower;
+	var seed_acorn;
+	var wateringcan;
+	var sunCloudSprite;
+	var plant;
+	var emitter;
+	var isRaining;
+	var plants;
 
 	function preload() {
 		game.load.image('tile_earth', 'assets/img/tile_earth.png');
@@ -104,16 +123,6 @@
 		game.load.atlasJSONHash('cat', 'assets/img/cat.png', 'assets/img/running_cat.json');
 	}
 
-	var toolbar;
-	var seed_sunflower;
-	var seed_acorn;
-	var wateringcan;
-	var sunCloudSprite;
-	var plant;
-	var emitter;
-	var isRaining;
-	var plants;
-
 	function create() {
         // Add the sky
 		game.stage.backgroundColor = dayColor;
@@ -126,6 +135,12 @@
 		for (var i = 0; i <= 600; i += 200) {
 			ground += game.add.tileSprite(i, 425, 200, 175, 'tile_earth');
 		}
+
+		infoFunFact = game.add.text(450, 450, "Fun Fact:\n"+funFacts[0], {
+			font: "25px Arial",
+			fill: "#ff0044",
+			align: "center"
+		});
 
 		infoWater = game.add.text(100, 450, "Water: ", {
 			font: "45px Arial",
@@ -186,7 +201,7 @@
 
 		game.weather = new ClearDayState(game);
 		game.weather.preload();
-		game.time.events.repeat(Phaser.Timer.SECOND, 10000, tick, this);
+		game.time.events.repeat(Phaser.Timer.SECOND*5, 10000, tick, this);
 	}
 
 	function tick() {
@@ -195,7 +210,7 @@
 
 		if(plants && plants[0] && plants[0].health < 0) {
 			if(typeof loseText === 'undefined') {
-				loseText = game.add.text(200, 200, "LOSER\n$5 to play again", {
+				loseText = game.add.text(100, 200, "LOSER\n$5 to play again", {
 					font: "45px Arial",
 					fill: "#ff0044",
 					align: "center"
@@ -206,7 +221,7 @@
 
 		if(plants && plants[0] && plants[0].age > Plant.getMaxAge()) {
 			if(typeof winText === 'undefined') {
-				winText = game.add.text(300, 200, "WINNER\nMore DLC at scholastic.com", {
+				winText = game.add.text(150, 200, "WINNER\nMore DLC at scholastic.com", {
 					font: "45px Arial",
 					fill: "#ff0044",
 					align: "center"
@@ -220,6 +235,8 @@
 		}
 
 		if(isDay) {
+			infoFunFact.setText("Fun Fact:\n" + funFacts[parseInt(Math.random()*funFacts.length)]);
+
 			if(Math.random() < rainChance) {
 				game.weather = rainyState;
 			} else {
@@ -230,16 +247,16 @@
 			for(var i = 0; i < plants.length; i++) {
 				plants[i].incrementAge();
 				if(game.weather === rainyState) {
-					plants[i].incrementWater(2);
+					plants[i].changeWater(2);
 				} else {
-					plants[i].decrementWater(15);
+					plants[i].changeWater(-15);
 				}
 			}
 
 		} else { // NOTE: 
 			game.weather = clearNightState;
 			for(var i = 0; i < plants.length; i++) {
-				plants[i].inflictDamage(5);
+				plants[i].changeHealth(-5);
 				plants[i].update();
 			}
 		}
@@ -265,8 +282,8 @@
 			// TODO: Figure out a range of 50px and add health to a plant under it
 			for(var i = 0; i < plants.length; i++) {
 				if(Math.abs(plants[i].sprite.x - sprite.x) < 175) {
-					plants[i].incrementWater(15);
-					plants[i].incrementHealth(10);
+					plants[i].changeWater(15);
+					plants[i].changeHealth(10);
 				}
 			}
 			// Reset the watering can position
@@ -308,7 +325,6 @@
 	
 	function collisionHandler (cat, plant) {
 		//  If the player collides with a chilli it gets eaten :)
-		console.log("Cat collides with plant");
 		plant.inflictDamage(25);
 		cat.destroy();
 	}
