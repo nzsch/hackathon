@@ -72,7 +72,7 @@
 			ground += game.add.tileSprite(i, 425, 200, 175, 'tile_earth');
 		}
 
-		infoFunFact = game.add.text(400, 450, "Fun Fact:\n"+funFacts[0], {
+		infoFunFact = game.add.text(450, 450, "Fun Fact:\n"+funFacts[0], {
 			font: "45px Arial",
 			fill: "#ff0044",
 			align: "center"
@@ -143,7 +143,7 @@
 
 		if(plants && plants[0] && plants[0].health < 0) {
 			if(typeof loseText === 'undefined') {
-				loseText = game.add.text(200, 200, "LOSER\n$5 to play again", {
+				loseText = game.add.text(100, 200, "LOSER\n$5 to play again", {
 					font: "45px Arial",
 					fill: "#ff0044",
 					align: "center"
@@ -154,7 +154,7 @@
 
 		if(plants && plants[0] && plants[0].age > Plant.getMaxAge()) {
 			if(typeof winText === 'undefined') {
-				winText = game.add.text(300, 200, "WINNER\nMore DLC at scholastic.com", {
+				winText = game.add.text(150, 200, "WINNER\nMore DLC at scholastic.com", {
 					font: "45px Arial",
 					fill: "#ff0044",
 					align: "center"

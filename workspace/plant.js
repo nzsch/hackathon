@@ -14,7 +14,6 @@ class Plant {
 		return 16;
 	}
 
-
 	getHealth() {
 		return this.health;
 	}
@@ -47,6 +46,6 @@ class Plant {
 	}
 
 	update() {
-		this.sprite.frameName = 'run'+ (this.age++);
+		//this.sprite.frameName = 'run'+ (this.age++);
 	}
 }
