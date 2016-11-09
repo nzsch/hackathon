@@ -26,12 +26,10 @@
 			this.health = health
 			this.age = 0;
 			this.game = game;
+			this.water = 100;
 
 			this.sprite = this.game.add.sprite(x, y, sprite);
 			this.sprite.scale.setTo(0.45, 0.45);
-		}
-
-		sprout() {
 		}
 
 		getHealth() {
@@ -42,8 +40,21 @@
 			return this.age;
 		}
 
+		getWater() {
+			return this.water;
+		}
+
+		decrementWater(amount) {
+			this.water -= amount;
+		}
+
+		incrementWater(amount) {
+			this.water += amount;
+		}
+
 		incrementAge() {
 			// TODO: make the plant taller
+			this.health +=5 ;
 			this.age +=1;
 		}
 
@@ -139,16 +150,20 @@
 		game.weather.end();
 
 		if(isDay) {
-			// If the plant lived, then we should make it age
-			for(var i = 0; i < plants.length; i++) {
-				plants[i].incrementAge();
-				console.log(plants[i].getHealth());
-			}
-
 			if(Math.random() < rainChance) {
 				game.weather = rainyState;
 			} else {
 				game.weather = clearDayState;
+			}
+
+			// If the plant lived, then we should make it age
+			for(var i = 0; i < plants.length; i++) {
+				plants[i].incrementAge();
+				if(game.weather === rainyState) {
+					plants[i].incrementWater(5);
+				} else {
+					plants[i].decrementWater(10);
+				}
 			}
 		} else { // NOTE: 
 			game.weather = clearNightState;
