@@ -137,7 +137,7 @@
         seed_acorn = game.add.sprite(40, 212, 'seed_acorn');
         seed_acorn.scale.setTo(0.05,0.05);
         wateringcan = game.add.sprite(19, 138, 'image_wateringcan');
-		food = game.add.sprite(19, 272, 'food');
+		food = game.add.sprite(20, 274, 'food');
 
         // Add click and drag mechanics to tools
         seed_sunflower.inputEnabled = true;
@@ -223,6 +223,9 @@
 			// Reset the watering can position
 			sprite.x = 19;
 			sprite.y = 138;
+		} else if (sprite.key === "food") {
+			sprite.x = 20;
+			sprite.y = 274;
 		}
 
 	}
