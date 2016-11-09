@@ -20,16 +20,14 @@
 	var nightColor = "#3a3f3f";
 	var rainColor = "#a8b5b3";
 	var rainChance = 0.3342; // I got this number from Google. 122/365 (number for NYC)
-	var funFacts = ["plants are green", "plants are cool", "this is a fun fact",
-	"1",
-	"2",
-	"3",
-	"4",
-	"5",
-	"6",
-	"7",
-	"8",
-	"9",
+	// tbh I stole them from here: http://www.sciencekids.co.nz/sciencefacts/plants.html
+	var funFacts = [
+	"Tree resin which\nhas been fossilized\nis known as amber.",
+	"Some plants are\ncarnivores like\nthe Venus Flytrap.",
+	"Bamboo grow almost\na metre (3.28 feet)\nin just one day!",
+	"Plants turn C02\ninto food in a process\ncalled photosynthesis.",
+	"Around 2000 different\ntypes of plants\nare used as food.",
+	"Poison ivy produces\na skin irritant\ncalled urushiol.",
 	];
 	var toolbar;
 	var seed_sunflower;
@@ -73,7 +71,7 @@
 		}
 
 		infoFunFact = game.add.text(450, 450, "Fun Fact:\n"+funFacts[0], {
-			font: "45px Arial",
+			font: "25px Arial",
 			fill: "#ff0044",
 			align: "center"
 		});
@@ -134,7 +132,7 @@
 
 		game.weather = new ClearDayState(game);
 		game.weather.preload();
-		game.time.events.repeat(Phaser.Timer.SECOND, 10000, tick, this);
+		game.time.events.repeat(Phaser.Timer.SECOND*5, 10000, tick, this);
 	}
 
 	function tick() {
