@@ -1,7 +1,7 @@
 
     <head>
         <meta charset="UTF-8" />
-        <title>hello phaser!</title>
+        <title>PhotoSIMthesis</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/2.6.2/phaser.min.js"></script>
 		
     </head>
@@ -83,6 +83,7 @@
 		game.load.image('sun_cloud','assets/img/sun_cloud.png');
 		game.load.image('moon', 'assets/img/moon.png');
 		game.load.image('raindrop', 'assets/img/raindrop.png');
+		game.load.image('food', 'assets/img/food.png');
 	}
 
 	var toolbar;
@@ -132,6 +133,7 @@
         seed_acorn = game.add.sprite(40, 212, 'seed_acorn');
         seed_acorn.scale.setTo(0.05,0.05);
         wateringcan = game.add.sprite(19, 138, 'image_wateringcan');
+		food = game.add.sprite(19, 272, 'food');
 
         // Add click and drag mechanics to tools
         seed_sunflower.inputEnabled = true;
@@ -144,7 +146,11 @@
 
         wateringcan.inputEnabled = true;
         wateringcan.input.enableDrag(true);
-		wateringcan.events.onDragStop.add(stopDrag, this)
+		wateringcan.events.onDragStop.add(stopDrag, this);
+
+		food.inputEnabled = true;
+		food.input.enableDrag(true);
+		food.events.onDragStop.add(stopDrag, this);
 
         //Draw bitmaps and do required stuff that I dont understand
 		bmd = game.make.bitmapData();
