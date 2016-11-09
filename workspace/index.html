@@ -147,7 +147,7 @@
 
 		if(plants && plants[0] && plants[0].health <= 0) {
 			if(typeof loseText === 'undefined') {
-				loseText = game.add.text(100, 200, "LOSER\n$5 to play again", {
+				loseText = game.add.text(200, 200, "LOSER\n$5 to play again", {
 					font: "45px Arial",
 					fill: "#ff0044",
 					align: "center"
@@ -262,7 +262,7 @@
 	
 	function collisionHandler (cat, plant) {
 		//  If the player collides with a chilli it gets eaten :)
-		plant.inflictDamage(25);
+		plant.changeHealth(-25);
 		cat.destroy();
 	}
 
