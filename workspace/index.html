@@ -169,7 +169,7 @@
 
 		game.weather = new ClearDayState(game);
 		game.weather.preload();
-		game.time.events.repeat(Phaser.Timer.SECOND , 10000, toggleDay, this);
+		game.time.events.repeat(Phaser.Timer.SECOND * 5, 10000, toggleDay, this);
 	}
 
 	function toggleDay() {
