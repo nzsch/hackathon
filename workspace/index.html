@@ -108,6 +108,23 @@
 			ground += game.add.tileSprite(i, 425, 200, 175, 'tile_earth');
 		}
 
+		infoWater = game.add.text(100, 450, "Water: ", {
+			font: "45px Arial",
+			fill: "#ff0044",
+			align: "center"
+		});
+
+		infoHealth = game.add.text(100, 500, "Health: ", {
+			font: "45px Arial",
+			fill: "#ff0044",
+			align: "center"
+		});
+
+		infoAge = game.add.text(100, 550, "Age: ", {
+			font: "45px Arial",
+			fill: "#ff0044",
+			align: "center"
+		});
 
         // Add toolbar and tool sprites
 		toolbar = game.add.image(0, 39, 'image_toolbar');
@@ -173,14 +190,14 @@
 
 	function stopDrag(sprite, game) {
 		if(sprite.key === "seed_sunflower") {
-			if(plants && plants.length < 2) {
+			if(plants && plants.length < 1) {
 				plants.push(new Plant('plant', sprite.x, 250, 100, this));
 			}
 			sprite.x = 40
 			sprite.y = 64;
 			// Seed drops and the plant grows after
 		} else if (sprite.key === "seed_acorn") {
-			if(plants && plants.length < 2) {
+			if(plants && plants.length < 1) {
 				plants.push(new Plant('plant', sprite.x, 250, 100, this));
 			}
 			sprite.x = 40
@@ -244,6 +261,11 @@
 
 		// Update weather
 		game.weather.update();
+		if(plants[0]) {
+			infoWater.setText("Water: " + plants[0].getWater());
+			infoHealth.setText("Health: " + plants[0].getHealth()); 
+			infoAge.setText("Age: " + plants[0].getAge());
+		}
 	}
 
     };
