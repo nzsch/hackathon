@@ -22,81 +22,6 @@
 	var rainChance = 0.3342; // I got this number from Google. 122/365 (number for NYC)
 	var catChance = 0.3342; // Its equally likely for it to rain and to get a cats
 
-	class Plant {
-		constructor(sprite, x, y, health, game) {
-			//this.sprite = sprite;
-			this.health = health
-			this.age = 0;
-			this.game = game;
-			this.water = 100;
-
-			this.sprite = this.game.add.sprite(x, y, sprite);
-			this.sprite.scale.setTo(1.5, 1.5);
-		}
-
-		static getMaxAge() {
-			return 16;
-		}
-
-		getHealth() {
-			return this.health;
-		}
-
-		getAge() {
-			return this.age;
-		}
-
-		getWater() {
-			return this.water;
-		}
-
-		changeWater(amount) {
-			this.water += amount;
-			if (this.water < 0)
-				this.water = 0;
-		}
-
-		decrementWater(amount) {
-			this.water -= amount;
-			if (this.water < 0)
-				this.water = 0;
-		}
-
-		incrementWater(amount) {
-			this.water += amount;
-			if (this.water > 100)
-				this.water = 100;
-		}
-
-		incrementAge() {
-			// TODO: make the plant taller
-			this.age +=1;
-		}
-
-		changeHealth(amount) {
-			this.health += amount;
-			if (this.health > 100)
-				this.health = 100;
-		}
-
-		incrementHealth(amount) {
-			this.health += amount;
-			if (this.health > 100)
-				this.health = 100;
-		}
-
-		inflictDamage(amount) {
-			// TODO: change overlay color depending on buckets of 1-5
-			this.health -= amount;
-			if (this.health < 0)
-				this.health = 0;
-		}
-
-		update() {
-			this.sprite.frameName = 'run'+ (this.age++);
-		}
-	}
-	
 	// tbh I stole them from here: http://www.sciencekids.co.nz/sciencefacts/plants.html
 	var funFacts = [
 	"Tree resin which\nhas been fossilized\nis known as amber.",
@@ -242,7 +167,7 @@
 			return;
 		}
 
-		if(Math.random() < rainChance && (!cat)) {
+		if(plant && plant[0] && Math.random() < rainChance && (!cat)) {
 			addCat();
 		}
 
