@@ -18,31 +18,65 @@
 
 function preload() {
   game.load.atlasJSONHash('cat', 'assets/img/cat.png', 'assets/img/running_cat.json');
+  //plant
+  game.load.atlasJSONHash('bot', 'assets/img/germination.png', 'assets/img/plant.json');
 }
 
 var cat;
+var cat_speed=1;
 
 function create() {
-    cat = game.add.sprite(200, 400, 'cat');
+	
+	
+	game.physics.startSystem(Phaser.Physics.ARCADE);
+
+    cat = game.add.sprite(100, 400, 'cat');
     cat.animations.add('run');
     cat.animations.play('run', 15, true);
+	cat.x = -cat.width;
+	
+	bot = game.add.sprite(400, 400, 'bot');
+    bot.animations.add('run');
+    bot.animations.play('run', 15, true);
+	
+	 game.physics.arcade.enable(cat);
+	 game.physics.arcade.enable(bot);
 
 }
+function runCat(){
+	cat.x +=  cat_speed;
+	//alert("cat.width="+cat.width);
+	//alert("cat.x="+cat.x);
+    if (cat.x > 900)
+    {
+        //cat.x = game.world.width;
+		cat.x = -cat.width;
+		
+    }else{
+			//cat.x = 0;
+	}
+	game.physics.arcade.overlap(cat, bot, collisionHandler, null, this);
 
+
+}
 
 function update() {
+ runCat();
+	
+	
+}
 
-	cat.x += 2;
-    if (cat.x < cat.width)
-    {
-        cat.x = game.world.width;
-    }
+function collisionHandler (cat, bot) {
+
+    //  If the player collides with a chilli it gets eaten :)
+    bot.kill();
 
 }
 
-
 function render() {
-    game.debug.body(cat);
+	//game.debug.body(bot);
+    //game.debug.body(cat);
+	
 }
 	
 	
