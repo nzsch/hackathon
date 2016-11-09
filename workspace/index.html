@@ -21,10 +21,10 @@
 	var rainChance = 0.3342; // I got this number from Google. 122/365 (number for NYC)
 
 	class Plant {
-		constructor(sprite, x, y, health, age, game) {
+		constructor(sprite, x, y, health, game) {
 			this.sprite = sprite;
 			this.health = health
-			this.age = age;
+			this.age = 0;
 			this.game = game;
 
 			this.sprite = this.game.add.sprite(x, y, sprite);
@@ -78,10 +78,14 @@
 	var plant;
 	var emitter;
 	var isRaining;
+	var plants;
 
 	function create() {
         // Add the sky
 		game.stage.backgroundColor = dayColor;
+
+		// All the plants that are on the screen
+		plants = [];
 
         // Tile ground
 		ground = [];
@@ -130,7 +134,12 @@
 		isDay = !isDay;
 		game.weather.end();
 
+
 		if(isDay) {
+			// If the plant lived, then we should make it age
+			for(var i = 0; i < plants.length; i++) {
+				plants[i].incrementAge();
+			}
 			// TODO: Stop day time activities
 			if(Math.random() < rainChance) {
 				game.weather = rainyState;
@@ -149,12 +158,16 @@
 	function stopDrag(sprite, game) {
 		// TODO: Trigger the action?
 		if(sprite.key === "seed_sunflower") {
-			plant = new Plant('plant', sprite.x, 250, 100, 1, this);
+			if(plants && plants.length < 2) {
+				plants.push(new Plant('plant', sprite.x, 250, 100, this));
+			}
 			sprite.x = 40
 			sprite.y = 64;
 			// Seed drops and the plant grows after
 		} else if (sprite.key === "seed_acorn") {
-			plant = new Plant('plant', sprite.x, 250, 100, 1, this);
+			if(plants && plants.length < 2) {
+				plants.push(new Plant('plant', sprite.x, 250, 100, this));
+			}
 			sprite.x = 40
 			sprite.y = 212;
 			// Seed drops and the plant grows after
