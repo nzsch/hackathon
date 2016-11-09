@@ -91,7 +91,7 @@
 			align: "center"
 		});
 
-		infoAge = game.add.text(100, 550, "Age: ", {
+		infoAge = game.add.text(100, 550, "Age:", {
 			font: "45px Arial",
 			fill: "#ff0044",
 			align: "center"
@@ -284,7 +284,7 @@
 		if(plants[0]) {
 			infoWater.setText("Water: " + plants[0].getWater());
 			infoHealth.setText("Health: " + plants[0].getHealth()); 
-			infoAge.setText("Age: " + plants[0].getAge());
+			infoAge.setText("Age: " + plants[0].getAge() + " days");
 		}	
 	}
 
