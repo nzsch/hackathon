@@ -11,6 +11,7 @@
 
     window.onload = function() {
 	
+	var size= 0;
 	var game = new Phaser.Game(800, 600, Phaser.CANVAS, 'phaser-example', { preload: preload, create: create, render: render });
 
 function preload() {
@@ -24,15 +25,20 @@ function create() {
 
     bot = game.add.sprite(100, 100, 'bot');
 
-    bot.animations.add('run');
-
-    bot.animations.play('run', 15, true);
-
-  //  game.input.onDown.addOnce(changeMummy, this);
-
+  //  bot.animations.add('run');
+    //bot.animations.play('run', 15, true);
+  
+    game.input.onDown.add(plantGrow, this);
 }
 
+function plantGrow() {
+	
+	if (size<18){
+		bot.frameName = 'run'+size++;
+	}
+    
 
+}
 
 function render() {
 
