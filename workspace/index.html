@@ -6,9 +6,9 @@
 		
     </head>
     <body>
-		<script src="states/ClearDayState.js"></script>
-		<script src="states/ClearNightState.js"></script>
-		<script src="states/RainyState.js"></script>
+	<script src="states/ClearDayState.js"></script>
+	<script src="states/ClearNightState.js"></script>
+	<script src="states/RainyState.js"></script>
     <script type="text/javascript">
 
     window.onload = function() {
@@ -19,10 +19,11 @@
 	var nightColor = "#3a3f3f";
 	var rainColor = "#a8b5b3";
 	var rainChance = 0.3342; // I got this number from Google. 122/365 (number for NYC)
+	var catChance = 0.3342; // Its equally likely for it to rain and to get a cats
 
 	class Plant {
 		constructor(sprite, x, y, health, game) {
-			this.sprite = sprite;
+			//this.sprite = sprite;
 			this.health = health
 			this.age = 0;
 			this.game = game;
@@ -100,6 +101,7 @@
 		game.load.image('raindrop', 'assets/img/raindrop.png');
 		game.load.image('food', 'assets/img/food.png');
 		game.load.atlasJSONHash('plant', 'assets/img/germination.png', 'assets/img/plant.json');
+		game.load.atlasJSONHash('cat', 'assets/img/cat.png', 'assets/img/running_cat.json');
 	}
 
 	var toolbar;
@@ -155,7 +157,7 @@
         seed_sunflower.inputEnabled = true;
         seed_sunflower.input.enableDrag(true);
 		seed_sunflower.events.onDragStop.add(stopDrag, this)
-
+		
         seed_acorn.inputEnabled = true;
         seed_acorn.input.enableDrag(true);
 		seed_acorn.events.onDragStop.add(stopDrag, this)
@@ -167,6 +169,9 @@
 		food.inputEnabled = true;
 		food.input.enableDrag(true);
 		food.events.onDragStop.add(stopDrag, this);
+
+		cat_speed = 1;
+		cat = null;
 
         //Draw bitmaps and do required stuff that I dont understand
 		bmd = game.make.bitmapData();
@@ -208,6 +213,10 @@
 				});
 			}
 			return;
+		}
+
+		if(Math.random() < rainChance && (!cat)) {
+			addCat();
 		}
 
 		if(isDay) {
@@ -270,53 +279,59 @@
 
 	}
 
-	function addPlant() {
-		plantSprite = game.add.sprite(50, 50, 'plant'),
-		plantSprite.scale.setTo(0.05,0.05);
+	function addCat() {
+		cat = game.add.sprite(100, 375, 'cat');
+		cat.animations.add('run');
+		cat.animations.play('run', 15, true);
+		cat.x = -cat.width;
+		cat.inputEnabled = true;
+		cat.events.onInputDown.add(destroyCat, this);
 	}
 
-	// NOTE: Do we even need this?
-	function plantSeed() {
-		if(plantSprite) {
-			plantSprite.visible = false;
+	function runCat(){
+		cat.x +=  cat_speed;
+
+		if (cat.x > 900)
+		{
+			cat.x = -cat.width;
+			
+		}else{
+				//cat.x = 0;
 		}
-	}
 
-	function addSeed() {
-		seedSprite = game.add.sprite(50, 50, 'seed'),
-		seedSprite.scale.setTo(0.05,0.05);
-	}
-
-
-	function removeSeed() {
-		if(seedSprite) {
-			seedSprite.visible = false;
+		for(var i = 0; i < plants.length; i++) {
+			if (plants[i].sprite.x <= (cat.x + 40)) {
+				collisionHandler(cat, plants[i]);
+			}
 		}
 	}
 	
-	function hideSprite(s) {
-		if(s) {
-			s.visible = false;
-		}
+	function collisionHandler (cat, plant) {
+		//  If the player collides with a chilli it gets eaten :)
+		console.log("Cat collides with plant");
+		plant.inflictDamage(25);
+		cat.destroy();
 	}
 
-	function stopRain(){
-		if (isRaining){
-			emitter.on = false;
-			isRaining = false;
-		}
-	}
+	function destroyCat() {
+		if (cat) {
+			cat.destroy();
+			cat = null; 
+		}	
+	};
 
 	function update () {
 		// Begin game loop
 
 		// Update weather
+		if (cat)
+			runCat();
 		game.weather.update();
 		if(plants[0]) {
 			infoWater.setText("Water: " + plants[0].getWater());
 			infoHealth.setText("Health: " + plants[0].getHealth()); 
 			infoAge.setText("Age: " + plants[0].getAge());
-		}
+		}	
 	}
 
     };
