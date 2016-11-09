@@ -247,7 +247,7 @@
 
 		if (cat.x > 900)
 		{
-			cat.x = -cat.width;
+			cat.destroy();
 			
 		}else{
 				//cat.x = 0;
@@ -263,7 +263,8 @@
 	function collisionHandler (cat, plant) {
 		//  If the player collides with a chilli it gets eaten :)
 		plant.changeHealth(-25);
-		cat.destroy();
+		plant.sprite.destroy();
+		plant = null;
 	}
 
 	function destroyCat() {
